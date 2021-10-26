@@ -1,0 +1,17 @@
+$include /etc/inputrc
+
+# Ensure all binding keeps the default Emacs behavior
+# Most common in a Bash shell environment, even for vi users
+set editing-mode emacs
+
+# Indicate file types with different colors when
+# doing auto-completion. Use the LS_COLORS variable.
+set colored-stats On
+
+# ignore case when doing auto-completion
+set completion-ignore-case on
+
+set show-all-if-ambiguous on
+
+"\C-p":history-search-backward
+"\C-n":history-search-forward
