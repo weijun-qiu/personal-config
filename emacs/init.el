@@ -53,6 +53,11 @@
 ;; shortcut for replace-string
 (global-set-key (kbd "C-c r") 'replace-string)
 
+;; shortcut for comment-line
+;; originally "C-c C-;" is mapped to comment-line, but we want to avoid using
+;; C-; since this key combination can't be sent on most terminal emulators
+(global-set-key (kbd "C-c C-c") 'comment-line)
+
 ;; shortcut for compile
 (global-set-key (kbd "C-c c") 'compile)
 
