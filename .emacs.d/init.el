@@ -1,8 +1,9 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 (require 'package)
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+;; 			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(add-to-list 'package-archives '("melpa" ."http://melpa.org/packages/"))
 
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
@@ -14,7 +15,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
+   '(helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -96,20 +97,23 @@
 (add-hook 'c-mode-common-hook 'google-set-c-style)
 (add-hook 'c-mode-common-hook 'google-make-newline-indent)
 
-;; C-mode - Irony
-(add-hook 'c-mode-common-hook 'irony-mode)
-(add-hook 'c-mode-common-hook 'irony-cdb-autosetup-compile-options)
+;; C-mode -lsp
+(add-hook 'c-mode-common-hook 'lsp)
 
-;; C-mode - Company Irony
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
+;; ;; C-mode - Irony
+;; (add-hook 'c-mode-common-hook 'irony-mode)
+;; (add-hook 'c-mode-common-hook 'irony-cdb-autosetup-compile-options)
 
-;; C-mode - Flycheck Irony
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+;; ;; C-mode - Company Irony
+;; (eval-after-load 'company
+;;   '(add-to-list 'company-backends 'company-irony))
 
-;; C-mode - Eldoc Irony
-(add-hook 'irony-mode-hook #'irony-eldoc)
+;; ;; C-mode - Flycheck Irony
+;; (eval-after-load 'flycheck
+;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
+;; ;; C-mode - Eldoc Irony
+;; (add-hook 'irony-mode-hook #'irony-eldoc)
 
 ;; C-mode - Recognize cuda src files
 (add-to-list 'auto-mode-alist '("\.cu$" . c++-mode))
