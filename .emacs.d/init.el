@@ -77,6 +77,9 @@
 (setq org-log-done t)
 (setq org-list-description-max-indent 5)
 (setq org-adapt-indentation nil)
+;; Inline image and disable hard-coded image size
+(setq org-startup-with-inline-images t)
+(setq org-image-actual-width nil)
 
 ;; C-mode - customized options
 (defun my-c-mode-common-hook ()
