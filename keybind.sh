@@ -1,3 +1,6 @@
+# Kill running xcape if there is one
+pkill xcape
+
 # Use existing keys to prevent emacs warnings
 KEY1=Hyper_L
 KEY2=Hyper_R
