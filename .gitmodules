@@ -1,0 +1,3 @@
+[submodule "autohotkey/third-party/dual"]
+	path = autohotkey/third-party/dual
+	url = git@github.com:lydell/dual.git
