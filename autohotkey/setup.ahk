@@ -11,10 +11,10 @@ dual := new Dual
 #If true ; Override defaults.ahk. There will be "duplicate hotkey" errors otherwise.
 
 ; Steve Losh shift buttons.
-*LShift::
-*LShift UP::dual.combine(A_ThisHotkey, "(")
-*RShift::
-*RShift UP::dual.combine(A_ThisHotkey, ")")
+; *LShift::
+; *LShift UP::dual.combine(A_ThisHotkey, "(")
+; *RShift::
+; *RShift UP::dual.combine(A_ThisHotkey, ")")
 
 ; CapsLock to LCtrl
 *CapsLock::
