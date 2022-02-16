@@ -18,11 +18,11 @@ dual := new Dual
 
 ; CapsLock to LCtrl
 *CapsLock::
-*CapsLock UP::dual.combine("LCtrl", A_ThisHotkey)
+*CapsLock UP::dual.combine("LCtrl", A_ThisHotkey, {delay: 0})
 
 ; Enter to RCtrl
 *Enter::
-*Enter UP::dual.combine("RCtrl", A_ThisHotkey)
+*Enter UP::dual.combine("RCtrl", A_ThisHotkey, {delay: 0})
 
 #If
 
