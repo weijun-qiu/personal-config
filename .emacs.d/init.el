@@ -15,7 +15,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
+   '(bazel helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -161,3 +161,12 @@
       `((".*" ,temporary-file-directory t)))
 
 (setq require-final-newline nil)
+
+;; bazel-mode
+;; (require 'bazel-build-mode)
+;; (require 'bazel-workspace-mode)
+(setq auto-mode-alist
+      (append '(("\.BUILD$"  . bazel-build-mode)
+		("^BUILD$" . bazel-build-mode)
+		("^WORKSPACE$" . bazel-workspace-mode))
+	      auto-mode-alist))
