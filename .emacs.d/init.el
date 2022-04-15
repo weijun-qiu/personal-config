@@ -162,6 +162,9 @@
 
 (setq require-final-newline nil)
 
+;; MLIR-mode
+(load "mlir-mode")
+
 ;; bazel-mode
 ;; (require 'bazel-build-mode)
 ;; (require 'bazel-workspace-mode)
