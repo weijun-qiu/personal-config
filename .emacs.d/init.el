@@ -162,8 +162,14 @@
 
 (setq require-final-newline nil)
 
+;; llvm-mode
+(require 'llvm-mode)
+
+;; tablegen-mode
+(require 'tablegen-mode)
+
 ;; MLIR-mode
-(load "mlir-mode")
+(require 'mlir-mode)
 
 ;; bazel-mode
 ;; (require 'bazel-build-mode)
