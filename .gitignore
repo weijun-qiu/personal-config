@@ -1,0 +1,6 @@
+# Exclude Emacs temporary or cache files
+/.emacs.d/*
+!/.emacs.d/init.el
+!/.emacs.d/lisp
+!/.emacs.d/elpa
+/.emacs.d/elpa/archives
