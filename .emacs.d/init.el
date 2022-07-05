@@ -15,7 +15,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(bazel helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
+   '(magit bazel helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -62,11 +62,6 @@
 ;; shortcut for compile
 (global-set-key (kbd "C-c c") 'compile)
 
-;; Set up clang-format
-(require 'clang-format)
-(global-set-key (kbd "C-c i") 'clang-format-region)
-(global-set-key (kbd "C-c u") 'clang-format-buffer)
-
 ;; Ivy Mode
 (ivy-mode 1)
 
@@ -94,6 +89,16 @@
   (display-fill-column-indicator-mode) ;; display a line at column 80
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+;; Set up clang-format
+(require 'clang-format)
+(defun clang-format-bind-key ()
+  (local-set-key (kbd "C-c i") 'clang-format-region)
+  (local-set-key (kbd "C-c u") 'clang-format-buffer)
+  )
+(add-hook 'c-mode-common-hook
+	  'clang-format-bind-key
+	  )
 
 ;; C-mode - Google C Style
 (require 'google-c-style)
@@ -149,6 +154,16 @@
                 ("\\.cmake\\'" . cmake-mode))
               auto-mode-alist))
 (setq cmake-tab-width 4)
+
+;; cmake-format
+(require 'cmake-format)
+(defun cmake-format-bind-key ()
+  (local-set-key (kbd "C-c u") 'cmake-format-buffer)
+  )
+(add-hook 'cmake-mode-hook
+	  'cmake-format-bind-key
+	  )
+(add-to-list 'auto-mode-alist '("\.cmake-format\\'" . python-mode))
 
 ;; Dockerfile mode
 (require 'dockerfile-mode)
