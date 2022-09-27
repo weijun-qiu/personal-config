@@ -194,3 +194,6 @@
 		("^BUILD$" . bazel-build-mode)
 		("^WORKSPACE$" . bazel-workspace-mode))
 	      auto-mode-alist))
+
+;; antlr-mode - Recognize Antlr4 grammar files
+(add-to-list 'auto-mode-alist '("\.g4$" . antlr-mode))
