@@ -27,15 +27,23 @@
     ;; and smaller 80 column windows for smaller displays
     ;; pick whatever numbers make sense for you
     (if (> (x-display-pixel-width) 1280)
-           (add-to-list 'default-frame-alist (cons 'width 120))
-           (add-to-list 'default-frame-alist (cons 'width 80)))
-    ;; for the height, subtract a couple hundred pixels
-    ;; from the screen height (for panels, menubars and
-    ;; whatnot), then divide by the height of a char to
-    ;; get the height we want
-    (add-to-list 'default-frame-alist
-         (cons 'height (/ (- (x-display-pixel-height) 200)
-                             (frame-char-height)))))))
+        (add-to-list 'default-frame-alist (cons 'width 120))
+        (add-to-list 'default-frame-alist (cons 'width 80)))
+    ;; iterate over the monitor list to find which monitor
+    ;; is used by the current frame
+    (let (monitor-height)
+      (dolist (monitor (display-monitor-attributes-list) monitor-height)
+	(if (cdr (assoc 'frames monitor))
+	    (setq monitor-height (nth 4 (assoc 'workarea monitor)))))
+      ;; for the height, subtract a couple hundred pixels
+      ;; from the screen height (for panels, menubars and
+      ;; whatnot), then divide by the height of a char to
+      ;; get the height we want
+      (add-to-list 'default-frame-alist
+		   (cons 'height (/ (- monitor-height 400)
+				    (frame-char-height)))))
+    (add-to-list 'default-frame-alist (cons 'top 200)))))
+  
 
 (set-frame-size-according-to-resolution)
 
