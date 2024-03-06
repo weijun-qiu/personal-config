@@ -55,6 +55,9 @@
       (toggle-scroll-bar -1)))
 (tool-bar-mode -1)
 
+;; Disable bell
+(setq visible-bell 1)
+
 ;; Use Command key as Meta on macos
 (setq mac-option-key-is-meta nil
       mac-command-key-is-meta t
