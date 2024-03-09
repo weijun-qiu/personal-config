@@ -170,6 +170,9 @@
 ;; (set-face-background hl-line-face "color-238")
 (set-face-background hl-line-face "gray28")
 
+;; Set face height to 120
+(set-face-attribute 'default nil :height 120)
+
 ;; CMake-mode
 (require 'cmake-mode)
 (setq auto-mode-alist
