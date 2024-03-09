@@ -70,6 +70,10 @@
 (when (daemonp)
   (exec-path-from-shell-initialize))
 
+;; shortcut for using ctrl + scroll to zoom in/out
+(global-set-key [C-mouse-4] 'text-scale-increase)
+(global-set-key [C-mouse-5] 'text-scale-decrease)
+
 ;; shortcut for replace-string
 (global-set-key (kbd "C-c r") 'replace-string)
 
