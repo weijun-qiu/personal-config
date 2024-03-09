@@ -22,6 +22,7 @@
 (defun set-frame-size-according-to-resolution ()
   (interactive)
   (if window-system
+  (let (monitor-workarea)
   (progn
     ;; use 120 char wide window for largeish displays
     ;; and smaller 80 column windows for smaller displays
@@ -30,20 +31,19 @@
         (add-to-list 'default-frame-alist (cons 'width 120))
         (add-to-list 'default-frame-alist (cons 'width 80)))
     ;; iterate over the monitor list to find which monitor
-    ;; is used by the current frame
-    (let (monitor-height)
-      (dolist (monitor (display-monitor-attributes-list) monitor-height)
-	(if (cdr (assoc 'frames monitor))
-	    (setq monitor-height (nth 4 (assoc 'workarea monitor)))))
-      ;; for the height, subtract a couple hundred pixels
-      ;; from the screen height (for panels, menubars and
-      ;; whatnot), then divide by the height of a char to
-      ;; get the height we want
-      (add-to-list 'default-frame-alist
-		   (cons 'height (/ (- monitor-height 400)
-				    (frame-char-height)))))
-    (add-to-list 'default-frame-alist (cons 'top 200)))))
-  
+    ;; is used by the current frame and get its workarea
+    (dolist (monitor (display-monitor-attributes-list) monitor-workarea)
+      (if (cdr (assoc 'frames monitor))
+	  (setq monitor-workarea (assoc 'workarea monitor))))
+    ;; for the height, subtract a couple hundred pixels
+    ;; from the screen height (for panels, menubars and
+    ;; whatnot), then divide by the height of a char to
+    ;; get the height we want
+    (add-to-list 'default-frame-alist
+		 (cons 'height (/ (- (nth 4 monitor-workarea) 400)
+				  (frame-char-height))))
+    (add-to-list 'default-frame-alist (cons 'top (+ (nth 2 monitor-workarea) 200)))
+    (add-to-list 'default-frame-alist (cons 'left (+ (nth 1 monitor-workarea) 200)))))))
 
 (set-frame-size-according-to-resolution)
 
