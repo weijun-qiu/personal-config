@@ -21,7 +21,6 @@
 ;; Set startup window size
 (defun set-frame-size-according-to-resolution ()
   (interactive)
-  (if window-system
   (let (monitor-workarea)
   (progn
     ;; use 120 char wide window for largeish displays
@@ -43,9 +42,21 @@
 		 (cons 'height (/ (- (nth 4 monitor-workarea) 400)
 				  (frame-char-height))))
     (add-to-list 'default-frame-alist (cons 'top (+ (nth 2 monitor-workarea) 200)))
-    (add-to-list 'default-frame-alist (cons 'left (+ (nth 1 monitor-workarea) 200)))))))
+    (add-to-list 'default-frame-alist (cons 'left (+ (nth 1 monitor-workarea) 200))))))
 
-(set-frame-size-according-to-resolution)
+;; There is no window-system during deamon startup, so add set-frame-size-according-to-resolution
+;; to the after-make-frame-functions hook so it will be triggered when invoking "emacsclient -c".
+;; Bug: The hook won't be triggered when creating the initial frame. (The official document
+;; says that init.el gets evaluated AFTER inital frame creation, but because in deamon mode init.el
+;; should have been evaluated during deamon startup, it still doesn't explain why the first frame
+;; created by "emacsclient -c" fails to invoke this hook.)
+(add-hook 'after-make-frame-functions
+	  (lambda (frame)
+	    (select-frame frame)
+	    (set-frame-size-according-to-resolution)))
+
+;; In GUI non-deamon Emacs, call this directly during init
+(if window-system (set-frame-size-according-to-resolution))
 
 ;; Remove undeeded ui components
 (setq inhibit-startup-screen t)
