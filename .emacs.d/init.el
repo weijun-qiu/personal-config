@@ -66,8 +66,22 @@
       (toggle-scroll-bar -1)))
 (tool-bar-mode -1)
 
-;; Disable bell
-(setq visible-bell 1)
+; Reduce the number of times the bell rings
+; Turn off the bell for the listed functions.
+(setq ring-bell-function
+      (lambda ()
+        (unless (memq this-command
+                      '(isearch-abort
+                        abort-recursive-edit
+                        exit-minibuffer
+                        keyboard-quit
+                        previous-line
+                        next-line
+                        scroll-down
+                        scroll-up
+                        cua-scroll-down
+                        cua-scroll-up))
+          (ding))))
 
 ;; Use Command key as Meta on macos
 (setq mac-option-key-is-meta nil
