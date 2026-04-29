@@ -6,17 +6,94 @@
   (load custom-file))
 
 (require 'package)
-;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-;; 			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
-(add-to-list 'package-archives '("melpa" ."http://melpa.org/packages/"))
-
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(setq package-archives
+      '(("gnu"    . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+        ("melpa"  . "https://melpa.org/packages/")))
 (package-initialize)
 
-;; Overwrite the default package list set by Customize
-(setq-default package-selected-packages '(magit bazel helm gnu-elpa-keyring-update lsp-ui helm-lsp lsp-mode yaml-mode dockerfile-mode ivy irony-eldoc flycheck-irony company-irony company google-c-style exec-path-from-shell clang-format irony cmake-mode zenburn-theme))
+;; Auto-install missing packages
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t) ;; Ensure auto-install missing pacakges
+
+(use-package zenburn-theme
+  :config (load-theme 'zenburn t))
+
+(use-package helm
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)))
+
+(use-package ivy
+  :config (ivy-mode 1))
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :config (exec-path-from-shell-initialize))
+
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (c-mode-common . lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l"))
+
+(use-package lsp-ui :commands lsp-ui-mode)
+
+(use-package helm-lsp :commands helm-lsp-telemetry)
+
+(use-package company
+  :config (global-company-mode))
+
+(use-package irony
+  :hook ((c++-mode . irony-mode)
+         (c-mode . irony-mode)))
+
+(use-package google-c-style
+  :ensure t
+  :hook (c-mode-common . (lambda ()
+                           (google-set-c-style)
+                           (google-make-newline-indent))))
+
+(use-package clang-format
+  :ensure t
+  :bind (:map c-mode-common-map
+              ("C-c i" . clang-format-region)
+              ("C-c u" . clang-format-buffer)))
+
+(use-package magit)
+
+(use-package bazel
+  :mode (("\\.BUILD\\'" . bazel-build-mode)
+         ("BUILD\\'" . bazel-build-mode)
+         ("WORKSPACE\\'" . bazel-workspace-mode)))
+
+(use-package cmake-mode
+  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
+         ("\\.cmake\\'" . cmake-mode))
+  :init
+  (setq cmake-tab-width 4))
+
+(use-package yaml-mode)
+
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package gnu-elpa-keyring-update)
+
+(use-package antlr-mode
+  :mode ("\\.g4\\'" . antlr-mode))
+
+;; llvm-mode
+(require 'llvm-mode)
+
+;; tablegen-mode
+(require 'tablegen-mode)
+
+;; MLIR-mode
+(require 'mlir-mode)
 
 ;; Set startup window size
 (defun set-frame-size-according-to-resolution ()
@@ -110,9 +187,6 @@
 ;; shortcut for compile
 (global-set-key (kbd "C-c c") 'compile)
 
-;; Ivy Mode
-(ivy-mode 1)
-
 ;; Org Mode
 (require 'org)
 (define-key global-map "\C-cl" 'org-store-link)
@@ -137,24 +211,6 @@
   (display-fill-column-indicator-mode) ;; display a line at column 80
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
-;; Set up clang-format
-(require 'clang-format)
-(defun clang-format-bind-key ()
-  (local-set-key (kbd "C-c i") 'clang-format-region)
-  (local-set-key (kbd "C-c u") 'clang-format-buffer)
-  )
-(add-hook 'c-mode-common-hook
-	  'clang-format-bind-key
-	  )
-
-;; C-mode - Google C Style
-(require 'google-c-style)
-(add-hook 'c-mode-common-hook 'google-set-c-style)
-(add-hook 'c-mode-common-hook 'google-make-newline-indent)
-
-;; C-mode -lsp
-(add-hook 'c-mode-common-hook 'lsp)
 
 ;; ;; C-mode - Irony
 ;; (add-hook 'c-mode-common-hook 'irony-mode)
@@ -198,28 +254,6 @@
 ;; Set face height to 120
 (set-face-attribute 'default nil :height 120)
 
-;; CMake-mode
-(require 'cmake-mode)
-(setq auto-mode-alist
-      (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-                ("\\.cmake\\'" . cmake-mode))
-              auto-mode-alist))
-(setq cmake-tab-width 4)
-
-;; cmake-format
-(require 'cmake-format)
-(defun cmake-format-bind-key ()
-  (local-set-key (kbd "C-c u") 'cmake-format-buffer)
-  )
-(add-hook 'cmake-mode-hook
-	  'cmake-format-bind-key
-	  )
-(add-to-list 'auto-mode-alist '("\.cmake-format\\'" . python-mode))
-
-;; Dockerfile mode
-(require 'dockerfile-mode)
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
-
 ;; Store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -227,24 +261,3 @@
       `((".*" ,temporary-file-directory t)))
 
 (setq require-final-newline nil)
-
-;; llvm-mode
-(require 'llvm-mode)
-
-;; tablegen-mode
-(require 'tablegen-mode)
-
-;; MLIR-mode
-(require 'mlir-mode)
-
-;; bazel-mode
-;; (require 'bazel-build-mode)
-;; (require 'bazel-workspace-mode)
-(setq auto-mode-alist
-      (append '(("\.BUILD$"  . bazel-build-mode)
-		("^BUILD$" . bazel-build-mode)
-		("^WORKSPACE$" . bazel-workspace-mode))
-	      auto-mode-alist))
-
-;; antlr-mode - Recognize Antlr4 grammar files
-(add-to-list 'auto-mode-alist '("\.g4$" . antlr-mode))

@@ -1,3 +1,4 @@
 # Ignore Emacs temporary or cache files
 .emacs.d/elpa
 .emacs.d/auto-save-list
+.emacs.d/eln-cache
