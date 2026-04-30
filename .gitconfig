@@ -1,8 +1,11 @@
 [pull]
-	rebase = true
+    rebase = true
 [user]
-	email = weijun.qiu@outlook.com
-	name = Weijun Qiu
-
+    email = weijun.qiu@outlook.com
+    name = Weijun Qiu
+[core]
+    editor = emacs
+[color]
+    ui = auto
 [include]
     path = ~/.gitconfig.local
