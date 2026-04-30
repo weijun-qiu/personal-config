@@ -47,6 +47,9 @@
 (use-package company
   :config (global-company-mode))
 
+(use-package flycheck
+  :config (global-flycheck-mode))
+
 (use-package irony
   :hook ((c++-mode . irony-mode)
          (c-mode . irony-mode)))
@@ -229,12 +232,6 @@
 
 ;; C-mode - Recognize cuda src files
 (add-to-list 'auto-mode-alist '("\.cu$" . c++-mode))
-
-;; Company mode
-(add-hook 'after-init-hook 'global-company-mode)
-
-;; Flycheck mode
-(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; Theme
 (load-theme 'zenburn t)
