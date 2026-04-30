@@ -1,2 +1,8 @@
 [pull]
 	rebase = true
+[user]
+	email = weijun.qiu@outlook.com
+	name = Weijun Qiu
+
+[include]
+    path = ~/.gitconfig.local

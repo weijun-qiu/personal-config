@@ -33,6 +33,21 @@ link_file "$DOTFILES_DIR/.inputrc"    "$HOME/.inputrc"
 link_file "$DOTFILES_DIR/.dircolors"  "$HOME/.dircolors"
 link_file "$DOTFILES_DIR/.emacs.d"    "$HOME/.emacs.d"
 
+# Initialize a local config file if it doesn't exist
+# This file is NOT tracked by Git, making it perfect for proxies
+LOCAL_CONFIG="$HOME/.gitconfig.local"
+if [ ! -f "$LOCAL_CONFIG" ]; then
+    touch "$LOCAL_CONFIG"
+    echo "# Local settings (Proxies, machine-specific paths, etc.)" > "$LOCAL_CONFIG"
+    echo "Created empty local config at $LOCAL_CONFIG"
+fi
+
+# Ensure the main config includes the local file
+if ! grep -q "path = ~/.gitconfig.local" "$DOTFILES_DIR/.gitconfig"; then
+    # Note: Append this to the end of your .gitconfig in the repo
+    echo -e "\n[include]\n    path = ~/.gitconfig.local" >> "$DOTFILES_DIR/.gitconfig"
+fi
+
 # 3. Shell Environment Integration
 # Instead of overwriting ~/.bashrc, we source the repository's init script
 if [ -f "$DOTFILES_DIR/bash_init.sh" ]; then
