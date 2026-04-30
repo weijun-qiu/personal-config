@@ -131,9 +131,10 @@
 ;; should have been evaluated during deamon startup, it still doesn't explain why the first frame
 ;; created by "emacsclient -c" fails to invoke this hook.)
 (add-hook 'after-make-frame-functions
-	  (lambda (frame)
-	    (select-frame frame)
-	    (set-frame-size-according-to-resolution)))
+          (lambda (frame)
+            (when (display-graphic-p frame)
+              (select-frame frame)
+              (set-frame-size-according-to-resolution))))
 
 ;; In GUI non-deamon Emacs, call this directly during init
 (if window-system (set-frame-size-according-to-resolution))
